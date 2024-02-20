@@ -34,19 +34,19 @@ public class ExperienceController {
 
     @GetMapping("{experienceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Experience getExperienceById(@PathVariable Long experienceId) {
+    public Experience getExperienceById(@PathVariable Integer experienceId) {
         return experienceService.getExperienceById(experienceId);
     }
 
     @PutMapping("{experienceId}")
     @ResponseStatus(HttpStatus.OK)
-    public ExperienceResponse updateExperienceById(@PathVariable Long experienceId, @RequestBody ExperienceRequest experienceRequest) {
+    public ExperienceResponse updateExperienceById(@PathVariable Integer experienceId, @RequestBody ExperienceRequest experienceRequest) {
         return experienceService.updateExperienceById(experienceId, experienceRequest);
     }
 
     @DeleteMapping("{experienceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExperienceById(@PathVariable Long experienceId) {
+    public void deleteExperienceById(@PathVariable Integer experienceId) {
         experienceService.deleteExperienceById(experienceId);
     }
 

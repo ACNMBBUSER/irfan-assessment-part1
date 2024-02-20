@@ -43,7 +43,7 @@ public class ExperienceService {
 
     public void createExperience(ExperienceRequest experienceRequest) {
         // Fetch the user entity with id = 1
-        User user = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("User with id = 1 not found"));
+        User user = userRepository.findById(1).orElseThrow(() -> new RuntimeException("User with id = 1 not found"));
 
         Experience experience = Experience.builder()
                 .Position(experienceRequest.getPosition())
@@ -59,7 +59,7 @@ public class ExperienceService {
 
     }
 
-    public Experience getExperienceById(Long experienceId) {
+    public Experience getExperienceById(Integer experienceId) {
         Optional<Experience> getExperience = experienceRepository.findById(experienceId);
 
         if (getExperience.isPresent()) {
@@ -71,7 +71,7 @@ public class ExperienceService {
         }
     }
 
-    public ExperienceResponse updateExperienceById(Long experienceId, ExperienceRequest experienceRequest) {
+    public ExperienceResponse updateExperienceById(Integer experienceId, ExperienceRequest experienceRequest) {
         Optional<Experience> getExperience = experienceRepository.findById(experienceId);
 
         if (getExperience.isPresent()) {
@@ -96,7 +96,7 @@ public class ExperienceService {
         }
     }
 
-    public void deleteExperienceById(Long experienceId) {
+    public void deleteExperienceById(Integer experienceId) {
         Optional<Experience> getExperience = experienceRepository.findById(experienceId);
 
         if (getExperience.isPresent()) {

@@ -3,6 +3,8 @@ package com.irfan.resumebe.Repository;
 import com.irfan.resumebe.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUserName(String userName);
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByUsername(String username);
 }
