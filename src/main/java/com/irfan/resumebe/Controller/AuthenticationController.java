@@ -18,14 +18,14 @@ public class AuthenticationController {
     }
 
 
-    @PostMapping("/register")
+    @PostMapping("/v1/api/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody User request
     ) {
         return ResponseEntity.ok(authService.register(request));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/v1/api/login")
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody User request
     ) {

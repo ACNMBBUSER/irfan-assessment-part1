@@ -10,27 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/external")
+@RequestMapping("/v1/api/external")
 @RequiredArgsConstructor
 
 
 public class ExternalApiController {
 
     @Autowired
-    private ExternalApiService externalAPIService;
+    private ExternalApiService externalApiService;
 
 
-    @GetMapping("/data")
-    public String getDataFromExternalAPI() {
-        // Call the service method to fetch data from the external API
-        String responseData = externalAPIService.getDataFromExternalAPI();
-        return responseData;
+    @PostMapping("/post")
+    public String postDataToExternalAPI(@RequestBody String title) {
+        // Call the service method to post data to the BillPlz API
+        return externalApiService.postDataToExternalAPI(title);
     }
-
-
-
-
-
 
 
 }

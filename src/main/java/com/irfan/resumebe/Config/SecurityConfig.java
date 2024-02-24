@@ -58,11 +58,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers("/login/**", "/register/**")
+                        req -> req.requestMatchers("/v1/api/login/**", "/v1/api/register/**")
                                 .permitAll()
                                 .requestMatchers(AUTH_WHITELIST)
                                 .permitAll()
-                                .requestMatchers("/api/user/admin_only/**").hasAuthority("ADMIN")
+                                .requestMatchers("/v1/api/user/admin_only/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsImpService)
