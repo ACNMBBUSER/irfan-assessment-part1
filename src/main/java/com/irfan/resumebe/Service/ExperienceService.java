@@ -41,23 +41,31 @@ public class ExperienceService {
         return experiences;
     }
 
-    public void createExperience(ExperienceRequest experienceRequest) {
-        // Fetch the user entity with id = 1
-        User user = userRepository.findById(1).orElseThrow(() -> new RuntimeException("User with id = 1 not found"));
+    public void createExperience(ExperienceRequest experienceRequest) throws UserNotFoundException {
+        try {
+            User user = userRepository.findById(1)
+                    .orElseThrow(() -> new UserNotFoundException("User with id = 1 not found"));
 
-        Experience experience = Experience.builder()
-                .Position(experienceRequest.getPosition())
-                .Company(experienceRequest.getCompany())
-                .start_date(experienceRequest.getStart_date())
-                .end_date(experienceRequest.getEnd_date())
-                .Responsibilities(experienceRequest.getResponsibilities())
-                .user(user) // Set the user
-                .build();
+            Experience experience = Experience.builder()
+                    .Position(experienceRequest.getPosition())
+                    .Company(experienceRequest.getCompany())
+                    .start_date(experienceRequest.getStart_date())
+                    .end_date(experienceRequest.getEnd_date())
+                    .Responsibilities(experienceRequest.getResponsibilities())
+                    .user(user)
+                    .build();
 
-        experienceRepository.save(experience);
-        log.info("Experience {} is saved", experience.getId());
-
+            experienceRepository.save(experience);
+            log.info("Experience {} is saved", experience.getId());
+        } catch (UserNotFoundException e) {
+            log.error("Error creating experience: {}", e.getMessage());
+            throw e; // Re-throw UserNotFoundException to propagate to controller
+        } catch (Exception e) {
+            log.error("Unexpected error creating experience: {}", e.getMessage());
+            throw new RuntimeException("Unexpected error occurred while creating experience", e); // Wrap other exceptions and propagate
+        }
     }
+
 
     public Experience getExperienceById(Integer experienceId) {
         Optional<Experience> getExperience = experienceRepository.findById(experienceId);

@@ -1,5 +1,6 @@
 package com.irfan.resumebe.Service;
 
+import com.irfan.resumebe.Exception.JwtExpiredException;
 import com.irfan.resumebe.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,7 +28,10 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        if (extractExpiration(token).before(new Date())) {
+            throw new JwtExpiredException("JWT token has expired");
+        }
+        return false;
     }
 
     private Date extractExpiration(String token) {

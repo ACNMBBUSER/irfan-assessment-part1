@@ -2,9 +2,8 @@ package com.irfan.resumebe.Controller;
 
 import com.irfan.resumebe.Model.Post;
 import com.irfan.resumebe.Service.PostService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,27 @@ public class PostController {
     @GetMapping("")
     List<Post> findAll() {
         return postService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    Post findById(@PathVariable Integer id) {
+        return postService.findById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    Post create(@RequestBody Post post) {
+        return postService.create(post);
+    }
+
+    @PutMapping
+    Post update (@PathVariable Integer id, @RequestBody Post post) {
+        return postService.update(id, post);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable Integer id) {
+        postService.delete(id);
     }
 }
