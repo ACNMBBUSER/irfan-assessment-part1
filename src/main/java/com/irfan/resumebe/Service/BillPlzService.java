@@ -20,7 +20,7 @@ public class BillPlzService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public void createCollection(String requestBody) {
+    public String createCollection(String requestBody) {
         String url = baseUrl;
 
         HttpHeaders headers = new HttpHeaders();
@@ -35,12 +35,17 @@ public class BillPlzService {
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 System.out.println("Collection created successfully!");
                 System.out.println("Response Body: " + responseEntity.getBody());
+                return responseEntity.getBody();
+
             } else {
                 System.err.println("Failed to create collection. Status code: " + responseEntity.getStatusCode());
+                return null;
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             System.err.println("Error occurred: " + e.getRawStatusCode() + " - " + e.getResponseBodyAsString());
+            return null;
         }
+
     }
     public String getCollection(String collectionId) {
         String url =  baseUrl + collectionId;

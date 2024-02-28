@@ -28,10 +28,12 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        if (extractExpiration(token).before(new Date())) {
-            throw new JwtExpiredException("JWT token has expired");
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (JwtExpiredException ex) {
+            // Log the exception or handle it as needed
+            return true; // Token is considered expired
         }
-        return false;
     }
 
     private Date extractExpiration(String token) {

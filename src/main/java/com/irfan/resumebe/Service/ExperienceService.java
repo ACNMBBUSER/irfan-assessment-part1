@@ -41,7 +41,7 @@ public class ExperienceService {
         return experiences;
     }
 
-    public void createExperience(ExperienceRequest experienceRequest) throws UserNotFoundException {
+    public Experience createExperience(ExperienceRequest experienceRequest) throws UserNotFoundException {
         try {
             User user = userRepository.findById(1)
                     .orElseThrow(() -> new UserNotFoundException("User with id = 1 not found"));
@@ -49,14 +49,14 @@ public class ExperienceService {
             Experience experience = Experience.builder()
                     .Position(experienceRequest.getPosition())
                     .Company(experienceRequest.getCompany())
-                    .start_date(experienceRequest.getStart_date())
-                    .end_date(experienceRequest.getEnd_date())
+                    .start_date(experienceRequest.getStartDate())
+                    .end_date(experienceRequest.getEndDate())
                     .Responsibilities(experienceRequest.getResponsibilities())
                     .user(user)
                     .build();
 
-            experienceRepository.save(experience);
-            log.info("Experience {} is saved", experience.getId());
+            return experienceRepository.save(experience);
+           // log.info("Experience {} is saved", experience.getId());
         } catch (UserNotFoundException e) {
             log.error("Error creating experience: {}", e.getMessage());
             throw e; // Re-throw UserNotFoundException to propagate to controller
@@ -64,6 +64,7 @@ public class ExperienceService {
             log.error("Unexpected error creating experience: {}", e.getMessage());
             throw new RuntimeException("Unexpected error occurred while creating experience", e); // Wrap other exceptions and propagate
         }
+       //return experienceRepository.save(experience);
     }
 
 
@@ -87,8 +88,8 @@ public class ExperienceService {
             // Update the existing experience with new data from the request
             existingExperience.setPosition(experienceRequest.getPosition());
             existingExperience.setCompany(experienceRequest.getCompany());
-            existingExperience.setStart_date(experienceRequest.getStart_date());
-            existingExperience.setEnd_date(experienceRequest.getEnd_date());
+            existingExperience.setStart_date(experienceRequest.getStartDate());
+            existingExperience.setEnd_date(experienceRequest.getEndDate());
             existingExperience.setResponsibilities(experienceRequest.getResponsibilities());
 
             // Save the updated experience

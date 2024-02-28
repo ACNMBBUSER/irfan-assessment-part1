@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/v1/api/external")
 
@@ -15,22 +18,59 @@ public class ExternalApiController {
     private BillPlzService billPlzService;
 
     @PostMapping("/collections")
-    public ResponseEntity<String> createCollection(@RequestBody String requestBody) {
+    public ResponseEntity<Map<String, Object>> createCollection(@RequestBody String requestBody) {
         try {
-            billPlzService.createCollection(requestBody);
-            return ResponseEntity.ok("Collection created successfully");
+            String responseBody = billPlzService.createCollection(requestBody);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("responseBody", responseBody);
+            data.put("message", "Collection created successfully");
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", true);
+            response.put("code", 200);
+            response.put("data", data);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create collection: " + e.getMessage());
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", false);
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "Failed to create collection");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
     @GetMapping("/collections/{collectionId}")
-    public ResponseEntity<String> getCollection(@PathVariable String collectionId) {
-        String responseBody = billPlzService.getCollection(collectionId);
-        if (responseBody != null) {
-            return ResponseEntity.ok("Collection retrieval request submitted successfully\n" + responseBody);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving collection information");
+    public ResponseEntity<Map<String, Object>> getCollection(@PathVariable String collectionId) {
+        try {
+            String responseBody = billPlzService.getCollection(collectionId);
+            if (responseBody != null) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("responseBody", responseBody);
+                data.put("message", "Collection retrieved successfully");
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("status", true);
+                response.put("code", 200);
+                response.put("data", data);
+
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("status", false);
+                errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+                errorResponse.put("message", "An error occurred Collection Not Found");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            }
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", false);
+            errorResponse.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            errorResponse.put("message", "An error occurred while retrieving collection information");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 

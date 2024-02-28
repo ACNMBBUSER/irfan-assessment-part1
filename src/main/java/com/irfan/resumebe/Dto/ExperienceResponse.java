@@ -10,11 +10,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExperienceResponse {
-    private Long id;
+    private String message;
+
+    private Integer id;
     private String Position;
     private String Company;
     private String start_date;
     private String end_date;
     private String Responsibilities;
 
+    public ExperienceResponse(String message) {
+        this.message = message;
+    }
+
+
 }
+
+
